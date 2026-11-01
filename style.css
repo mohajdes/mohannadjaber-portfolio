@@ -39,7 +39,7 @@ html {
 
 body {
   background:
-    linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.72)),
+    linear-gradient(rgba(0, 0, 0, 0.147), rgba(0, 0, 0, 0.29)),
     url('https://res.cloudinary.com/dwo3dfocn/image/upload/f_auto,q_auto/v1762827424/website_background_quality_ubhmtj.jpg');
   background-size: contain;
   background-color: var(--color-base);
