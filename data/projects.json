@@ -1,6 +1,26 @@
 {
-  "categories": ["Logo", "Social Media", "Packaging", "Printing"],
+  "categories": [
+    "Logo",
+    "Social Media",
+    "Packaging",
+    "Printing"
+  ],
   "projects": [
+    {
+      "id": "laira-vaiedaleva",
+      "title": "Laira Vaiedaleva",
+      "tag": "Kaime",
+      "category": "Social Media",
+      "coverImage": "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597818/gq72edw49azwhksj7wfs.jpg",
+      "description": "Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash.",
+      "images": [
+        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597777/z04g8soqmfuafmzocwem.jpg",
+        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597798/c8ghaqnizkdews3ba6xz.jpg",
+        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597802/yavqz7pwibznlmcqdchh.jpg",
+        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597806/d4fmjr6duldpjkdyzhjg.jpg",
+        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597811/unjre4yfkpdziqavacwx.jpg"
+      ]
+    },
     {
       "id": "sahar-crochet",
       "title": "Sahar Crochet",
