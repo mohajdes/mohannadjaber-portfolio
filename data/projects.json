@@ -7,21 +7,6 @@
   ],
   "projects": [
     {
-      "id": "laira-vaiedaleva",
-      "title": "Laira Vaiedaleva",
-      "tag": "Kaime",
-      "category": "Social Media",
-      "coverImage": "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597818/gq72edw49azwhksj7wfs.jpg",
-      "description": "Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash, Sheko wa Meko dakhalo al fasl, Amalo mashakel mabtekhlash.",
-      "images": [
-        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597777/z04g8soqmfuafmzocwem.jpg",
-        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597798/c8ghaqnizkdews3ba6xz.jpg",
-        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597802/yavqz7pwibznlmcqdchh.jpg",
-        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597806/d4fmjr6duldpjkdyzhjg.jpg",
-        "https://res.cloudinary.com/dwo3dfocn/image/upload/v1793597811/unjre4yfkpdziqavacwx.jpg"
-      ]
-    },
-    {
       "id": "sahar-crochet",
       "title": "Sahar Crochet",
       "tag": "Branding",
@@ -93,32 +78,6 @@
       "images": [
         "https://res.cloudinary.com/dwo3dfocn/image/upload/v1769903405/Artboard_1-100_bzdgix.jpg",
         "https://res.cloudinary.com/dwo3dfocn/image/upload/v1769903404/Artboard_2-100_xzbam1.jpg"
-      ]
-    },
-    {
-      "id": "project-6",
-      "title": "Gourmet Bites",
-      "tag": "Food Packaging",
-      "category": "Packaging",
-      "coverImage": "https://picsum.photos/seed/gourmet-cover/800/600",
-      "description": "Packaging design for a line of gourmet snacks. The design uses bold colors and playful illustrations to stand out on the shelves, while clear typography and iconography communicate key product information effectively.",
-      "images": [
-        "https://picsum.photos/1200/800?random=1",
-        "https://picsum.photos/1200/800?random=2",
-        "https://picsum.photos/1200/800?random=3"
-      ]
-    },
-    {
-      "id": "project-7",
-      "title": "Lyle Snack",
-      "tag": "Handmade products",
-      "category": "Logo",
-      "coverImage": "https://picsum.photos/800/600",
-      "description": "Packaging design for a line of gourmet snacks. The design uses bold colors and playful illustrations to stand out on the shelves, while clear typography and iconography communicate key product information effectively.",
-      "images": [
-        "https://picsum.photos/1200/800?random=1",
-        "https://picsum.photos/1200/800?random=2",
-        "https://picsum.photos/1200/800?random=3"
       ]
     }
   ]
