@@ -84,18 +84,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Page-Specific Logic ---
     if (document.body.id === 'work-page') {
-        initWorkPage();
+        loadProjects().then(initWorkPage).catch(showLoadError);
     }
     if (document.body.id === 'project-page') {
-        initProjectPage();
+        loadProjects().then(initProjectPage).catch(showLoadError);
     }
 });
 
 
-function initWorkPage() {
+// --- Data & helpers ---
+// Projects live in data/projects.json (edited through /admin).
+function loadProjects() {
+    return fetch('data/projects.json')
+        .then(res => {
+            if (!res.ok) throw new Error(`Failed to load projects (${res.status})`);
+            return res.json();
+        });
+}
+
+function showLoadError() {
+    const target = document.getElementById('project-grid') || document.getElementById('project-detail-container');
+    if (target) target.innerHTML = '<p class="section-subtitle">Could not load projects. Please refresh the page.</p>';
+}
+
+function esc(value) {
+    return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Serve Cloudinary images resized + in the best format (WebP/AVIF) instead of the full-size original.
+function optimizeImage(url, width) {
+    if (!/^https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(url)) return url;
+    return url.replace(/\/image\/upload\/(?:.*?\/)?(v\d+\/)/, `/image/upload/f_auto,q_auto,w_${width}/$1`);
+}
+
+function initWorkPage({ categories, projects: allProjects }) {
+    const projects = allProjects.filter(p => !p.hidden);
     const projectGrid = document.getElementById('project-grid');
     const filterContainer = document.getElementById('filter-container');
-    const projectCategories = ['All', 'Logo', 'Social Media', 'Packaging', 'Printing'];
+    const projectCategories = ['All', ...categories];
     let activeFilter = 'All';
 
     function renderProjects(filter) {
@@ -106,15 +132,15 @@ function initWorkPage() {
 
         filteredProjects.forEach((project, index) => {
             const card = document.createElement('a');
-            card.href = `project.html?id=${project.id}`;
+            card.href = `project.html?id=${encodeURIComponent(project.id)}`;
             card.className = 'project-card';
             card.style.setProperty('--delay', `${index * 0.02}s`);
             card.innerHTML = `
-                <img src="${project.coverImage}" alt="${project.title}">
+                <img src="${esc(optimizeImage(project.coverImage, 800))}" alt="${esc(project.title)}" loading="lazy" decoding="async">
                 <div class="project-card-overlay"></div>
                 <div class="project-card-content">
-                    <span class="project-card-tag">${project.tag}</span>
-                    <h3 class="project-card-title">${project.title}</h3>
+                    <span class="project-card-tag">${esc(project.tag)}</span>
+                    <h3 class="project-card-title">${esc(project.title)}</h3>
                 </div>
             `;
             projectGrid.appendChild(card);
@@ -143,7 +169,7 @@ function initWorkPage() {
     renderProjects(activeFilter);
 }
 
-function initProjectPage() {
+function initProjectPage({ projects }) {
     const container = document.getElementById('project-detail-container');
     const params = new URLSearchParams(window.location.search);
     const projectId = params.get('id');
@@ -151,24 +177,24 @@ function initProjectPage() {
 
     if (project) {
         document.title = `${project.title} | Mohannad A.J.`;
-        let imagesHTML = project.images.map((img, index) => 
-            `<div class="animate-on-scroll" style="--delay: ${0.2 + index * 0.1}s">
-                <img src="${img}" alt="${project.title} - view ${index + 1}">
+        let imagesHTML = (project.images || []).map((img, index) =>
+            `<div class="animate-on-scroll" style="--delay: ${Math.min(0.2 + index * 0.1, 0.6)}s">
+                <img src="${esc(optimizeImage(img, 1600))}" alt="${esc(project.title)} - view ${index + 1}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async">
             </div>`
         ).join('');
 
-        let videoHTML = project.video ? 
+        let videoHTML = project.video ?
             `<div class="animate-on-scroll">
-                <video src="${project.video}" controls autoplay muted loop></video>
-            </div>` 
+                <video src="${esc(project.video)}" controls autoplay muted loop playsinline preload="metadata"></video>
+            </div>`
             : '';
 
         container.innerHTML = `
             <a href="work.html" class="back-link">&larr; Back to Work</a>
             <header class="project-header">
-                <p class="project-header-category animate-fade-in-up">${project.category}</p>
-                <h1 class="project-header-title animate-fade-in-up" style="--delay: 0.1s">${project.title}</h1>
-                <p class="project-header-description animate-fade-in-up" style="--delay: 0.2s">${project.description}</p>
+                <p class="project-header-category animate-fade-in-up">${esc(project.category)}</p>
+                <h1 class="project-header-title animate-fade-in-up" style="--delay: 0.1s">${esc(project.title)}</h1>
+                <p class="project-header-description animate-fade-in-up" style="--delay: 0.2s">${esc(project.description)}</p>
             </header>
             <div class="project-gallery">
                 ${videoHTML}

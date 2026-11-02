@@ -497,6 +497,9 @@ a {
   display: grid;
   gap: 0rem;
 }
+.project-gallery img {
+  aspect-ratio: auto 3 / 2; /* reserve space so lazy images do not all load at once */
+}
 .project-gallery img,
 .project-gallery video {
   width: 100%;
