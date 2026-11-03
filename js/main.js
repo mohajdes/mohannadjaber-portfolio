@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                             </a>
                         </div>
-                        <p class="footer-text-right">Website Was Developed by Me BTW</p>
+                        <p class="footer-text-right">Designed &amp; built by Mohannad</p>
                     </div>
                 </div>
             </footer>
@@ -52,10 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Mobile Menu Logic ---
     const menuToggle = document.getElementById('mobile-menu-toggle');
     const navLinks = document.getElementById('nav-links');
+    const setMenu = open => {
+        navLinks.classList.toggle('active', open);
+        document.body.classList.toggle('menu-open', open);
+        menuToggle.setAttribute('aria-expanded', open);
+        menuToggle.querySelector('path').setAttribute('d', open ? 'M6 6l12 12M18 6L6 18' : 'M4 6h16M4 12h16m-7 6h7');
+    };
     if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
+        menuToggle.addEventListener('click', () => setMenu(!navLinks.classList.contains('active')));
+        navLinks.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+    }
+
+    // --- Header turns solid once the page scrolls ---
+    const header = document.querySelector('.header');
+    if (header) {
+        const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 24);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
     }
 
     // --- Active Nav Link ---
