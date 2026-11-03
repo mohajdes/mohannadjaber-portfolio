@@ -93,13 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // --- Data & helpers ---
-// Projects live in data/projects.json (edited through /admin).
-function loadProjects() {
-    return fetch('data/projects.json')
-        .then(res => {
-            if (!res.ok) throw new Error(`Failed to load projects (${res.status})`);
-            return res.json();
-        });
+// Projects come from /api/projects (Cloudflare KV). If the API is unreachable we fall back to the
+// static data/projects.json seed. A logged-in admin (flag set at login) gets drafts too, plus editing tools.
+async function loadProjects() {
+    if (localStorage.getItem('pf-admin') === '1') {
+        try {
+            const res = await fetch('/api/admin/projects', { credentials: 'same-origin', cache: 'no-store' });
+            if (res.ok) return { ...(await res.json()), admin: true };
+            if (res.status === 401) localStorage.removeItem('pf-admin'); // session expired
+        } catch (e) { /* fall through to the public data */ }
+    }
+    try {
+        const res = await fetch('/api/projects');
+        if (res.ok) return await res.json();
+    } catch (e) { /* fall through to the seed file */ }
+
+    const res = await fetch('data/projects.json');
+    if (!res.ok) throw new Error(`Failed to load projects (${res.status})`);
+    const data = await res.json();
+    return { ...data, projects: data.projects.filter(p => !p.hidden) };
 }
 
 function showLoadError() {
@@ -117,26 +129,48 @@ function optimizeImage(url, width) {
     return url.replace(/\/image\/upload\/(?:.*?\/)?(v\d+\/)/, `/image/upload/f_auto,q_auto,w_${width}/$1`);
 }
 
-function initWorkPage({ categories, projects: allProjects }) {
-    const projects = allProjects.filter(p => !p.hidden);
+// Loads the editing tools (only ever for a logged-in admin).
+function loadAdmin() {
+    document.documentElement.classList.add('pf-admin');
+    return new Promise((resolve, reject) => {
+        const css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = 'css/admin.css';
+        document.head.appendChild(css);
+        const script = document.createElement('script');
+        script.src = 'js/admin.js';
+        script.onload = () => resolve(window.PFAdmin);
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+}
+
+function initWorkPage(data) {
     const projectGrid = document.getElementById('project-grid');
     const filterContainer = document.getElementById('filter-container');
-    const projectCategories = ['All', ...categories];
     let activeFilter = 'All';
+    const ctx = { data, afterRender: null, render: () => { renderFilters(); renderProjects(); } };
 
-    function renderProjects(filter) {
+    function renderProjects() {
         projectGrid.innerHTML = '';
-        const filteredProjects = filter === 'All'
-            ? projects
-            : projects.filter(p => p.category === filter);
+        const filteredProjects = activeFilter === 'All'
+            ? data.projects
+            : data.projects.filter(p => p.category === activeFilter);
+
+        if (!filteredProjects.length) {
+            projectGrid.innerHTML = `<p class="section-subtitle" style="grid-column:1/-1;text-align:center">${data.admin ? 'No projects here yet.' : 'Nothing to show yet.'}</p>`;
+        }
 
         filteredProjects.forEach((project, index) => {
             const card = document.createElement('a');
             card.href = `project.html?id=${encodeURIComponent(project.id)}`;
-            card.className = 'project-card';
+            card.className = 'project-card' + (project.hidden ? ' is-draft' : '');
+            card.dataset.id = project.id;
             card.style.setProperty('--delay', `${index * 0.02}s`);
             card.innerHTML = `
-                <img src="${esc(optimizeImage(project.coverImage, 800))}" alt="${esc(project.title)}" loading="lazy" decoding="async">
+                ${project.coverImage
+                    ? `<img src="${esc(optimizeImage(project.coverImage, 800))}" alt="${esc(project.title)}" loading="lazy" decoding="async">`
+                    : '<div class="project-card-empty">No cover yet</div>'}
                 <div class="project-card-overlay"></div>
                 <div class="project-card-content">
                     <span class="project-card-tag">${esc(project.tag)}</span>
@@ -145,10 +179,13 @@ function initWorkPage({ categories, projects: allProjects }) {
             `;
             projectGrid.appendChild(card);
         });
+        if (ctx.afterRender) ctx.afterRender();
     }
 
     function renderFilters() {
-        projectCategories.forEach(category => {
+        filterContainer.innerHTML = '';
+        if (activeFilter !== 'All' && !data.categories.includes(activeFilter)) activeFilter = 'All';
+        ['All', ...data.categories].forEach(category => {
             const button = document.createElement('button');
             button.className = 'filter-button';
             button.textContent = category;
@@ -157,34 +194,42 @@ function initWorkPage({ categories, projects: allProjects }) {
             }
             button.addEventListener('click', () => {
                 activeFilter = category;
-                document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                renderProjects(activeFilter);
+                renderFilters();
+                renderProjects();
             });
             filterContainer.appendChild(button);
         });
     }
 
-    renderFilters();
-    renderProjects(activeFilter);
+    ctx.render();
+    if (data.admin) loadAdmin().then(admin => admin.mountWork(ctx)).catch(() => {});
 }
 
-function initProjectPage({ projects }) {
+function initProjectPage(data) {
     const container = document.getElementById('project-detail-container');
-    const params = new URLSearchParams(window.location.search);
-    const projectId = params.get('id');
-    const project = projects.find(p => p.id === projectId);
+    const projectId = new URLSearchParams(window.location.search).get('id');
+    const project = data.projects.find(p => p.id === projectId);
 
-    if (project) {
-        document.title = `${project.title} | Mohannad A.J.`;
-        let imagesHTML = (project.images || []).map((img, index) =>
-            `<div class="animate-on-scroll" style="--delay: ${Math.min(0.2 + index * 0.1, 0.6)}s">
+    if (!project) {
+        container.innerHTML = `<h1 class="page-title">Project not found.</h1><a href="work.html" class="back-link">Return to Work</a>`;
+        return;
+    }
+
+    const ctx = { data, project, afterRender: null, render };
+
+    function render() {
+        document.title = `${project.title || 'Untitled project'} | Mohannad A.J.`;
+        // Visitors get fade-in on scroll; the admin sees everything at once because the page re-renders while editing.
+        const reveal = data.admin ? '' : ' animate-on-scroll';
+
+        const imagesHTML = project.images.map((img, index) =>
+            `<div class="gallery-item${reveal}" data-i="${index}" style="--delay: ${Math.min(0.2 + index * 0.1, 0.6)}s">
                 <img src="${esc(optimizeImage(img, 1600))}" alt="${esc(project.title)} - view ${index + 1}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async">
             </div>`
         ).join('');
 
-        let videoHTML = project.video ?
-            `<div class="animate-on-scroll">
+        const videoHTML = project.video ?
+            `<div class="${reveal.trim()}">
                 <video src="${esc(project.video)}" controls autoplay muted loop playsinline preload="metadata"></video>
             </div>`
             : '';
@@ -192,32 +237,31 @@ function initProjectPage({ projects }) {
         container.innerHTML = `
             <a href="work.html" class="back-link">&larr; Back to Work</a>
             <header class="project-header">
-                <p class="project-header-category animate-fade-in-up">${esc(project.category)}</p>
+                <p class="project-header-category animate-fade-in-up">${esc(project.category)}${project.hidden ? ' · <span class="draft-pill">Draft</span>' : ''}</p>
                 <h1 class="project-header-title animate-fade-in-up" style="--delay: 0.1s">${esc(project.title)}</h1>
-                <p class="project-header-description animate-fade-in-up" style="--delay: 0.2s">${esc(project.description)}</p>
+                ${project.description ? `<p class="project-header-description animate-fade-in-up" style="--delay: 0.2s">${esc(project.description)}</p>` : ''}
             </header>
             <div class="project-gallery">
                 ${videoHTML}
                 ${imagesHTML}
             </div>
         `;
-        
-        // Re-run observer for dynamically added elements
-        const animatedElements = container.querySelectorAll('.animate-on-scroll');
-         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.1
-        });
-        animatedElements.forEach(el => observer.observe(el));
 
+        if (!data.admin) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            container.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+        }
 
-    } else {
-        container.innerHTML = `<h1 class="page-title">Project not found.</h1><a href="work.html" class="back-link">Return to Work</a>`;
+        if (ctx.afterRender) ctx.afterRender();
     }
+
+    render();
+    if (data.admin) loadAdmin().then(admin => admin.mountProject(ctx)).catch(() => {});
 }

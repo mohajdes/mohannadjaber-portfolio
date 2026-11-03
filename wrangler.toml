@@ -1,0 +1,8 @@
+name = "mohannadjaber-portfolio"
+pages_build_output_dir = "."
+compatibility_date = "2026-10-01"
+
+# Stores the project list, the admin password hash and login sessions (see functions/).
+[[kv_namespaces]]
+binding = "PF_KV"
+id = "116bb01f11654678b9f0972eec5f7811"
