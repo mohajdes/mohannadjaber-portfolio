@@ -148,10 +148,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=3';
+        css.href = 'css/admin.css?v=4';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=3';
+        script.src = 'js/admin.js?v=4';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);

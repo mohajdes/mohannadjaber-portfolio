@@ -64,6 +64,11 @@
 .pf-status { font-size: 0.85rem; color: #bdbdbd; }
 .pf-status.ok { color: var(--pf-ok); }
 .pf-status.err { color: var(--pf-danger); }
+@media (max-width: 640px) {
+  .pf-bar { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; gap: 0.4rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+  .pf-bar .pf-btn { flex: none; padding: 0.4rem 0.65rem; font-size: 0.82rem; }
+  .pf-admin body { padding-bottom: 5rem; }
+}
 @media (max-width: 480px) {
   .pf-pub { padding: 0.4rem 0.5rem; gap: 0.35rem; }
   .pf-pub .pf-btn { padding: 0.4rem 0.6rem; font-size: 0.82rem; }
