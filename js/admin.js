@@ -1,6 +1,6 @@
 /*
  * In-place editor for the portfolio. Loaded by main.js only for a logged-in admin.
- * Every change is saved automatically to /api/admin/projects. Images go straight to Cloudinary.
+ * Changes autosave to a private draft (/api/admin/projects); "Publish" makes them live. Images go straight to Cloudinary.
  */
 (function () {
   'use strict';
@@ -49,6 +49,74 @@
     if (el) { el.textContent = text; el.className = `pf-status ${kind}`; }
   }
 
+  // ---------- publish ----------
+  // Edits autosave to a private draft; visitors only see them after "Publish".
+  function setSavedStatus() {
+    setStatus(ctx.data.changed ? 'Draft saved · not published yet' : 'Everything is published', ctx.data.changed ? '' : 'ok');
+  }
+
+  function updatePublishUI() {
+    const publish = $('#pf-publish');
+    if (!publish) return;
+    const changed = !!ctx.data.changed;
+    publish.disabled = !changed;
+    publish.textContent = changed ? 'Publish changes' : 'Published ✓';
+    $('#pf-discard').hidden = !changed;
+  }
+
+  function buildPublishBar() {
+    const el = document.createElement('div');
+    el.className = 'pf-pub';
+    el.innerHTML = `
+      <span class="pf-status" id="pf-status"></span>
+      <button class="pf-btn pf-danger" id="pf-discard" hidden>Discard changes</button>
+      <button class="pf-btn pf-primary" id="pf-publish">Published ✓</button>`;
+    document.body.appendChild(el);
+    $('#pf-publish').onclick = publishChanges;
+    $('#pf-discard').onclick = discardChanges;
+    updatePublishUI();
+    setSavedStatus();
+  }
+
+  async function publishChanges() {
+    const btn = $('#pf-publish');
+    btn.disabled = true;
+    btn.textContent = 'Publishing…';
+    if (!await saveNow()) { toast('Still saving, try again in a moment.', { kind: 'error' }); return updatePublishUI(); }
+    try {
+      const res = await fetch('/api/admin/publish', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ baseRev: ctx.data.rev }),
+      });
+      if (res.status === 401) return sessionExpired();
+      if (res.status === 409) {
+        toast('This was changed in another tab or device. Reloading…', { kind: 'error' });
+        return setTimeout(() => location.reload(), 1500);
+      }
+      if (!res.ok) throw new Error();
+      ctx.data.changed = false;
+      updatePublishUI();
+      setSavedStatus();
+      toast('Published! Visitors can see your changes.', { kind: 'ok' });
+    } catch (err) {
+      toast('Could not publish. Please try again.', { kind: 'error' });
+      updatePublishUI();
+    }
+  }
+
+  function discardChanges() {
+    modal('Discard changes?', '<p>Everything you changed since the last publish will be lost. The live site stays as it is.</p>', {
+      submitLabel: 'Discard',
+      onSubmit: async () => {
+        if (!await saveNow()) return 'Still saving, try again in a moment.';
+        const res = await fetch('/api/admin/discard', { method: 'POST', credentials: 'same-origin' });
+        if (!res.ok) return 'Could not discard the changes.';
+        location.href = ctx.project ? 'work.html' : location.href;
+      },
+    });
+  }
+
   // ---------- saving ----------
   const saver = { timer: null, inflight: false, dirty: false };
 
@@ -80,8 +148,11 @@
         return;
       }
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.status);
-      d.rev = (await res.json()).rev;
-      if (!saver.dirty) setStatus('All changes saved ✓', 'ok');
+      const saved = await res.json();
+      d.rev = saved.rev;
+      d.changed = saved.changed;
+      updatePublishUI();
+      if (!saver.dirty) setSavedStatus();
     } catch (err) {
       failed = true;
       saver.dirty = true;
@@ -157,7 +228,7 @@
     };
     setStatus(`Uploading 0/${files.length}…`);
     await Promise.all([worker(), worker(), worker()]);
-    setStatus(saver.dirty ? 'Saving…' : 'All changes saved ✓', saver.dirty ? '' : 'ok');
+    if (saver.dirty) setStatus('Saving…'); else setSavedStatus();
     return urls.filter(Boolean);
   }
 
@@ -177,8 +248,9 @@
   function buildBar(html) {
     const bar = document.createElement('div');
     bar.className = 'pf-bar';
-    bar.innerHTML = html + '<span class="pf-status" id="pf-status"></span>';
+    bar.innerHTML = html;
     document.body.appendChild(bar);
+    buildPublishBar();
     return bar;
   }
 

@@ -45,7 +45,21 @@
   border-radius: 1.25rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
 }
-.pf-status { font-size: 0.78rem; color: var(--color-secondary); min-width: 7.5rem; text-align: center; }
+.pf-status { font-size: 0.78rem; color: var(--color-secondary); text-align: center; }
+
+/* Publish bar, pinned to the top */
+.pf-pub {
+  position: fixed; top: 0.75rem; left: 50%; transform: translateX(-50%);
+  z-index: 130;
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.4rem 0.5rem 0.4rem 1rem;
+  background: var(--color-base); border: 1px solid var(--pf-line); border-radius: 999px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  white-space: nowrap;
+}
+.pf-pub .pf-btn[hidden] { display: none; }
+@media (max-width: 600px) { .pf-pub { max-width: calc(100vw - 1rem); padding-left: 0.7rem; } .pf-pub .pf-status { white-space: normal; max-width: 6.5rem; } }
+@media (min-width: 900px) { .pf-admin.pf-panel-open .pf-pub { left: calc(50% - 180px); } }
 .pf-status.ok { color: var(--pf-ok); }
 .pf-status.err { color: var(--pf-danger); }
 
@@ -191,7 +205,6 @@
 
 @media (max-width: 640px) {
   .pf-bar { border-radius: 1rem; }
-  .pf-status { width: 100%; }
 }
 
 /* Keep the bar clear of the settings panel */

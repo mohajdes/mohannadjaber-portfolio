@@ -9,7 +9,21 @@ export async function readData(env, request) {
   return { ...(await seed.json()), rev: 0 };
 }
 
-const isUrl = value => typeof value === 'string' && value.length <= 2000 && /^https:\/\/\S+$/.test(value);
+// Edits are saved to "draft" and only copied to "data" (what visitors see) when the admin publishes.
+export async function readDraft(env, published) {
+  const raw = await env.PF_KV.get('draft');
+  return raw ? JSON.parse(raw) : published;
+}
+
+// True when the working copy differs from what visitors currently see.
+export function hasChanges(draft, published) {
+  const content = d => {
+    try { return JSON.stringify(sanitizeData(d)); } catch { return JSON.stringify({ categories: d.categories, projects: d.projects }); }
+  };
+  return content(draft) !== content(published);
+}
+
+const isUrl =value => typeof value === 'string' && value.length <= 2000 && /^https:\/\/\S+$/.test(value);
 const clean = (value, max) => String(value ?? '').trim().slice(0, max);
 
 // Never trust the client: rebuild the document from known fields only.
