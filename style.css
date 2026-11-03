@@ -141,7 +141,7 @@ button { font-family: inherit; }
   letter-spacing: 0.22em;
   color: var(--color-primary);
 }
-.logo::after { content: "."; color: var(--gold); }
+
 
 /* Phone menu: a full-screen sheet with big, easy-to-hit links */
 .nav-links {
