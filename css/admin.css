@@ -141,9 +141,9 @@
   border: 1px dashed var(--pf-accent); animation: pf-pulse 1.2s ease-in-out infinite;
 }
 @keyframes pf-pulse { 50% { opacity: 0.5; } }
-.pf-empty { text-align: center; padding: 3rem 1rem; border: 1px dashed var(--pf-line); border-radius: 6px; color: #bdbdbd; font-family: var(--pf-font); }
+.pf-empty { text-align: center; padding: 3rem 1rem; border: 1px dashed var(--pf-line); border-radius: 6px; color: #555; font-family: var(--pf-font); }
 .pf-empty .pf-btn { margin: 1rem 0; }
-.pf-hint { color: #bdbdbd; font: 0.85rem var(--pf-font); }
+.pf-hint { color: #555; font: 0.85rem var(--pf-font); }
 
 /* --- Reorder mode --- */
 .pf-reorder { margin-top: 2rem; padding: 0 var(--gutter); display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }

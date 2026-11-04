@@ -1,31 +1,32 @@
 /* ==========================================================================
-   Mohannad A.J. — portfolio
-   Dark, editorial, gold accent. Mobile first: base rules are for phones,
-   media queries only add to them.
+   Mohannad Jaber — portfolio
+   Light, editorial, warm ivory with a gold accent. Mobile first: base rules
+   are for phones, media queries only add to them.
    ========================================================================== */
 
 :root {
   --font-sans: "Poppins", system-ui, sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
 
-  --color-base: #0b0a09;
-  --color-raised: #141210;
-  --color-surface: #1a1714;
-  --color-primary: #f6f1ea;
-  --color-secondary: #a79f94;
-  --color-border: rgba(246, 241, 234, 0.1);
+  --color-base: #faf7f2;
+  --color-raised: #ffffff;
+  --color-surface: #efe9df;
+  --color-primary: #17140f;
+  --color-secondary: #6b6258;
+  --color-border: rgba(23, 20, 15, 0.12);
 
-  --gold: #ffc160;
+  --gold: #ffc160;          /* the accent: fills, lines, highlights */
   --gold-deep: #d79a35;
-  --gold-line: rgba(255, 193, 96, 0.35);
-  --gold-glow: rgba(255, 193, 96, 0.12);
+  --gold-ink: #94650f;      /* darker gold so small gold text stays readable on ivory */
+  --gold-line: rgba(215, 154, 53, 0.6);
+  --gold-glow: rgba(255, 193, 96, 0.28);
 
   --header-height: 76px;
   --gutter: 1.25rem;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   --selection-bg: var(--gold);
-  --selection-color: #0b0a09;
+  --selection-color: #17140f;
 }
 
 ::selection { background: var(--selection-bg); color: var(--selection-color); }
@@ -37,8 +38,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   background-color: var(--color-base);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -8%, var(--gold-glow), transparent 70%);
+  background-image: radial-gradient(ellipse 70% 45% at 50% -6%, var(--gold-glow), transparent 70%);
   background-repeat: no-repeat;
   color: var(--color-primary);
   font-family: var(--font-sans);
@@ -86,7 +86,7 @@ button { font-family: inherit; }
   content: "";
   display: block;
   width: 2.5rem;
-  height: 1px;
+  height: 2px;
   background: var(--gold);
   margin: 0 auto 1.5rem;
 }
@@ -111,14 +111,14 @@ button { font-family: inherit; }
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(11, 10, 9, 0);
+  background: rgba(250, 247, 242, 0);
   border-bottom: 1px solid transparent;
-  transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+  transition: background 0.4s ease, border-color 0.4s ease;
   pointer-events: none;
 }
 .header.scrolled::before,
 .menu-open .header::before {
-  background: rgba(11, 10, 9, 0.82);
+  background: rgba(250, 247, 242, 0.9);
   border-bottom-color: var(--color-border);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
@@ -136,12 +136,12 @@ button { font-family: inherit; }
   position: relative;
   z-index: 3;
   font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   color: var(--color-primary);
 }
-
+.logo em { font-style: italic; }
 
 /* Phone menu: a full-screen sheet with big, easy-to-hit links */
 .nav-links {
@@ -153,7 +153,7 @@ button { font-family: inherit; }
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: rgba(11, 10, 9, 0.97);
+  background: var(--color-base);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.35s ease, visibility 0.35s;
@@ -169,7 +169,7 @@ button { font-family: inherit; }
   color: var(--color-primary);
   transition: color 0.3s ease;
 }
-.nav-link:hover, .nav-link.active { color: var(--gold); }
+.nav-link:hover, .nav-link.active { color: var(--gold-ink); }
 
 .mobile-menu-toggle {
   position: relative;
@@ -186,7 +186,6 @@ button { font-family: inherit; }
   cursor: pointer;
 }
 .mobile-menu-toggle svg { width: 26px; height: 26px; }
-.menu-open .mobile-menu-toggle { color: var(--gold); }
 
 /* --- Footer --- */
 .footer {
@@ -209,12 +208,12 @@ button { font-family: inherit; }
   place-items: center;
   width: 44px;
   height: 44px;
-  color: var(--color-secondary);
+  color: var(--color-primary);
   border: 1px solid var(--color-border);
   border-radius: 50%;
-  transition: color 0.3s ease, border-color 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
-.footer-social-links a:hover { color: var(--gold); border-color: var(--gold-line); }
+.footer-social-links a:hover { background: var(--gold); border-color: var(--gold); }
 
 /* --- Buttons --- */
 .cta-button,
@@ -230,22 +229,22 @@ button { font-family: inherit; }
   letter-spacing: 0.2em;
   text-transform: uppercase;
   border-radius: 999px;
-  transition: background 0.35s var(--ease), color 0.35s var(--ease), transform 0.35s var(--ease);
+  transition: background 0.35s var(--ease), color 0.35s var(--ease), transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
 }
 .cta-button {
-  color: var(--gold);
-  border: 1px solid var(--gold-line);
-  background: transparent;
+  color: #17140f;
+  background: var(--gold);
+  border: 1px solid var(--gold);
 }
-.cta-button:hover { background: var(--gold); color: #0b0a09; }
+.cta-button:hover { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-base); }
 
 .whatsapp-button {
-  color: #0b0a09;
-  background: linear-gradient(135deg, #ffd48a, var(--gold) 50%, var(--gold-deep));
+  color: #17140f;
+  background: var(--gold);
   font-weight: 600;
-  box-shadow: 0 10px 30px -10px rgba(255, 193, 96, 0.55);
+  box-shadow: 0 12px 30px -12px rgba(215, 154, 53, 0.9);
 }
-.whatsapp-button:hover { transform: translateY(-2px); }
+.whatsapp-button:hover { transform: translateY(-2px); background: var(--color-primary); color: var(--color-base); }
 
 /* --- Home --- */
 .hero-section {
@@ -264,18 +263,20 @@ button { font-family: inherit; }
   font-weight: 500;
   letter-spacing: 0.38em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-ink);
   margin-bottom: 1.75rem;
 }
 .hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(3.1rem, 17vw, 9rem);
+  font-size: clamp(3.4rem, 18vw, 9.5rem);
   font-weight: 500;
   letter-spacing: -0.02em;
-  line-height: 1;
-  margin-bottom: 1.25rem;
+  line-height: 0.98;
+  margin-bottom: 1.5rem;
 }
-.hero-title span {
+.hero-title .line { display: block; overflow: hidden; padding-bottom: 0.08em; }
+.hero-title .line + .line { font-style: italic; font-weight: 400; }
+.hero-title span.ch {
   display: inline-block;
   opacity: 0;
   transform: translateY(100%);
@@ -283,17 +284,17 @@ button { font-family: inherit; }
   animation-delay: calc(var(--i) * 0.05s);
 }
 .hero-subtitle {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.25rem, 4.5vw, 1.75rem);
+  font-size: 0.8rem;
   font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
   color: var(--color-secondary);
   margin-bottom: 2.5rem;
 }
 .hero-rule {
   width: 1px;
   height: 3.5rem;
-  background: linear-gradient(var(--gold), transparent);
+  background: linear-gradient(var(--gold-deep), transparent);
   margin: 3rem auto 0;
 }
 
@@ -309,7 +310,13 @@ button { font-family: inherit; }
   text-align: center;
 }
 
-.services-section { padding: 5rem 0; border-top: 1px solid var(--color-border); counter-reset: service; }
+.services-section {
+  padding: 5rem 0;
+  background: var(--color-raised);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  counter-reset: service;
+}
 .services-grid { display: grid; grid-template-columns: 1fr; border-top: 1px solid var(--color-border); }
 
 .service-card {
@@ -326,7 +333,7 @@ button { font-family: inherit; }
   top: 2.1rem;
   font-family: var(--font-serif);
   font-size: 1rem;
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 .service-card-icon-bg, .service-card-icon { display: none; }
 .service-card h3 {
@@ -365,10 +372,10 @@ button { font-family: inherit; }
   border: 1px solid transparent;
   border-radius: 999px;
   cursor: pointer;
-  transition: color 0.3s ease, border-color 0.3s ease;
+  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
 }
 .filter-button:hover { color: var(--color-primary); }
-.filter-button.active { color: var(--gold); border-color: var(--gold-line); }
+.filter-button.active { color: #17140f; background: var(--gold); border-color: var(--gold); }
 
 .project-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
 
@@ -386,22 +393,23 @@ button { font-family: inherit; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 1.1s var(--ease), filter 0.5s ease;
+  transition: transform 1.1s var(--ease);
 }
 .project-card::after {
   content: "";
   position: absolute;
   inset: 0.75rem;
-  border: 1px solid var(--gold-line);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   border-radius: 2px;
   opacity: 0;
   transition: opacity 0.5s ease;
   pointer-events: none;
 }
+/* The photo stays dark at the bottom so the white title is always readable */
 .project-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(11, 10, 9, 0.88) 0%, rgba(11, 10, 9, 0.25) 45%, transparent 70%);
+  background: linear-gradient(to top, rgba(17, 14, 10, 0.82) 0%, rgba(17, 14, 10, 0.2) 45%, transparent 70%);
 }
 .project-card-content {
   position: absolute;
@@ -411,6 +419,7 @@ button { font-family: inherit; }
   flex-direction: column;
   justify-content: flex-end;
   gap: 0.35rem;
+  color: #fff;
 }
 .project-card-tag {
   align-self: flex-start;
@@ -440,7 +449,7 @@ button { font-family: inherit; }
   color: var(--color-secondary);
   transition: color 0.3s ease;
 }
-.back-link:hover { color: var(--gold); }
+.back-link:hover { color: var(--color-primary); }
 
 .project-header { padding: 0 var(--gutter); }
 .project-header-category {
@@ -448,7 +457,7 @@ button { font-family: inherit; }
   font-weight: 500;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-ink);
 }
 .project-header-title { font-size: clamp(2.5rem, 9vw, 5rem); margin: 1rem 0 1.25rem; }
 .project-header-description {
@@ -459,7 +468,7 @@ button { font-family: inherit; }
   white-space: pre-line;
 }
 .project-gallery { margin-top: 3rem; display: grid; gap: 0.75rem; }
-.project-gallery img { aspect-ratio: auto 3 / 2; } /* reserve space so lazy images do not jump */
+.project-gallery img { aspect-ratio: auto 3 / 2; background: var(--color-surface); } /* reserve space so lazy images do not jump */
 .project-gallery img, .project-gallery video { width: 100%; }
 
 /* --- Hire --- */
@@ -483,9 +492,9 @@ button { font-family: inherit; }
   color: var(--color-primary);
   border: 1px solid var(--color-border);
   border-radius: 50%;
-  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s var(--ease);
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s var(--ease);
 }
-.social-link:hover { color: var(--gold); border-color: var(--gold-line); transform: translateY(-2px); }
+.social-link:hover { background: var(--gold); border-color: var(--gold); transform: translateY(-2px); }
 
 /* --- Content tweaks used by the editor --- */
 .project-card-empty {
@@ -499,7 +508,7 @@ button { font-family: inherit; }
 }
 .draft-pill {
   background: var(--gold);
-  color: #0b0a09;
+  color: #17140f;
   padding: 0.1rem 0.5rem;
   border-radius: 9999px;
   font-size: 0.7rem;
@@ -533,7 +542,7 @@ button { font-family: inherit; }
 @media (hover: hover) {
   .project-card:hover img { transform: scale(1.06); }
   .project-card:hover::after { opacity: 1; }
-  .service-card:hover { background: rgba(255, 193, 96, 0.04); padding-left: 3.75rem; }
+  .service-card:hover { background: rgba(255, 193, 96, 0.12); padding-left: 3.75rem; }
 }
 
 /* --- Bigger screens --- */
@@ -569,12 +578,13 @@ button { font-family: inherit; }
     content: "";
     position: absolute;
     left: 1rem; right: 1rem; bottom: 0.2rem;
-    height: 1px;
+    height: 2px;
     background: var(--gold);
     transform: scaleX(0);
     transition: transform 0.4s var(--ease);
   }
   .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+  .nav-link:hover, .nav-link.active { color: var(--color-primary); }
   .mobile-menu-toggle { display: none; }
 
   .footer-content { flex-direction: row; justify-content: space-between; }

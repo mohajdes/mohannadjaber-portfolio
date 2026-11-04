@@ -1,4 +1,4 @@
-# Mohannad A.J. portfolio
+# Mohannad Jaber portfolio
 
 Static site on Cloudflare Pages, with a small built-in editor.
 

@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <header class="header">
                 <div class="container">
                     <nav class="header-nav">
-                        <a href="index.html" class="logo">M.AJ</a>
+                        <a href="index.html" class="logo">Mohannad <em>Jaber</em></a>
                         <div class="nav-links" id="nav-links">
                             <a href="index.html" class="nav-link">Home</a>
                             <a href="work.html" class="nav-link">Work</a>
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <footer class="footer">
                 <div class="container">
                     <div class="footer-content">
-                        <p>&copy; ${new Date().getFullYear()} Mohannad A.J. Portfolio</p>
+                        <p>&copy; ${new Date().getFullYear()} Mohannad Jaber</p>
                         <div class="footer-social-links">
                             <a href="https://www.facebook.com/mohannadesigns" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                             </a>
                         </div>
-                        <p class="footer-text-right">Designed &amp; built by Mohannad</p>
                     </div>
                 </div>
             </footer>
@@ -148,10 +147,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=4';
+        css.href = 'css/admin.css?v=5';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=4';
+        script.src = 'js/admin.js?v=5';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);
@@ -231,7 +230,7 @@ function initProjectPage(data) {
     const ctx = { data, project, afterRender: null, render };
 
     function render() {
-        document.title = `${project.title || 'Untitled project'} | Mohannad A.J.`;
+        document.title = `${project.title || 'Untitled project'} | Mohannad Jaber`;
         // Visitors get fade-in on scroll; the admin sees everything at once because the page re-renders while editing.
         const reveal = data.admin ? '' : ' animate-on-scroll';
 
