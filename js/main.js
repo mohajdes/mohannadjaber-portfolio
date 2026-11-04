@@ -95,9 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Page-Specific Logic ---
-    if (document.body.id === 'home-page') {
-        loadProjects().then(initHome).catch(() => document.getElementById('featured')?.remove());
-    }
     if (document.body.id === 'work-page') {
         loadProjects().then(initWorkPage).catch(showLoadError);
     }
@@ -150,10 +147,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=9';
+        css.href = 'css/admin.css?v=10';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=9';
+        script.src = 'js/admin.js?v=10';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);
@@ -273,7 +270,7 @@ function initProjectPage(data) {
 }
 
 
-// One project card (used on the Work page and for the featured work on the home page).
+// One project card (used on the Work page).
 function projectCardHTML(project) {
     return `
         <div class="project-card-media">
@@ -288,18 +285,3 @@ function projectCardHTML(project) {
     `;
 }
 
-function initHome(data) {
-    const grid = document.getElementById('featured-grid');
-    const featured = data.projects.filter(p => !p.hidden && p.coverImage).slice(0, 4);
-    if (!grid || !featured.length) { document.getElementById('featured')?.remove(); return; }
-    featured.forEach(project => {
-        const card = document.createElement('a');
-        card.href = `project.html?id=${encodeURIComponent(project.id)}`;
-        card.className = 'project-card animate-on-scroll';
-        card.innerHTML = projectCardHTML(project);
-        grid.appendChild(card);
-        new IntersectionObserver((entries, obs) => {
-            if (entries[0].isIntersecting) { card.classList.add('is-visible'); obs.disconnect(); }
-        }, { threshold: 0.1 }).observe(card);
-    });
-}

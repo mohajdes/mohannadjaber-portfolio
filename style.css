@@ -276,7 +276,6 @@ button { font-family: inherit; }
   font-weight: 400;
 }
 
-.featured-section { padding: 4rem 0 2rem; }
 
 .about-section { padding: 4rem 0; }
 .about-section .container::before {
@@ -528,7 +527,6 @@ button { font-family: inherit; }
   .footer-content { flex-direction: row; align-items: center; justify-content: space-between; }
   .footer-social-links { order: 0; }
 
-  .featured-section { padding-top: 6rem; }
   .about-section { padding: 6rem 0; }
   .services-section { padding-bottom: 6rem; }
   .service-card { grid-template-columns: 4rem 1fr 1.3fr; column-gap: 2rem; align-items: baseline; padding: 2rem 0; }

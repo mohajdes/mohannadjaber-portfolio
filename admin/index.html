@@ -9,19 +9,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css?v=9">
+    <link rel="stylesheet" href="../style.css?v=10">
     <style>
         .login { min-height: 100vh; display: grid; place-items: center; padding: 1.5rem; }
-        .login-card { width: 100%; max-width: 380px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 1rem; padding: 2rem; }
-        .login-card h1 { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 0.5rem; }
-        .login-card p { color: var(--color-secondary); font-size: 0.9rem; margin-bottom: 1.25rem; }
-        .login-card label { display: block; font-size: 0.8rem; color: var(--color-secondary); margin: 1rem 0 0.4rem; }
-        .login-card input { width: 100%; padding: 0.7rem 0.9rem; border-radius: 0.5rem; border: 1px solid var(--color-border); background: var(--color-base); color: var(--color-primary); font: inherit; }
-        .login-card input:focus { outline: none; border-color: var(--selection-bg); }
-        .login-card button { width: 100%; margin-top: 1.5rem; padding: 0.8rem; border: 0; border-radius: 9999px; background: var(--selection-bg); color: #17140f; font: inherit; font-weight: 600; cursor: pointer; }
+        .login-card { width: 100%; max-width: 400px; background: var(--color-raised); border: 1px solid var(--color-primary); border-top: 6px solid var(--gold); padding: 2rem; }
+        .login-card h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.5rem; }
+        .login-card p { color: var(--color-secondary); font-size: 0.95rem; margin-bottom: 1.25rem; }
+        .login-card label { display: block; font-size: 0.8rem; font-weight: 700; margin: 1rem 0 0.4rem; }
+        .login-card input { width: 100%; min-height: 48px; padding: 0.7rem 0.9rem; border: 1px solid var(--color-primary); border-radius: 0; background: var(--color-raised); color: var(--color-primary); font: inherit; }
+        .login-card input:focus { outline: 3px solid var(--gold); outline-offset: 0; }
+        .login-card button { width: 100%; min-height: 52px; margin-top: 1.5rem; border: 0; border-radius: 0; background: var(--gold); color: #111; font: inherit; font-weight: 700; cursor: pointer; }
+        .login-card button:hover:not(:disabled) { background: var(--color-primary); color: var(--color-base); }
         .login-card button:disabled { opacity: 0.6; cursor: wait; }
-        .login-error { color: #b3261e; font-size: 0.85rem; min-height: 1.2em; margin-top: 0.9rem; }
-        .login-back { display: block; text-align: center; margin-top: 1.25rem; color: var(--color-secondary); font-size: 0.85rem; }
+        .login-error { color: #c2362b; font-size: 0.88rem; font-weight: 600; min-height: 1.2em; margin-top: 0.9rem; }
+        .login-back { display: block; text-align: center; margin-top: 1.25rem; color: var(--color-secondary); font-size: 0.9rem; font-weight: 600; }
     </style>
 </head>
 <body>
