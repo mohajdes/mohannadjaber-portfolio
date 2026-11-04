@@ -138,7 +138,7 @@ function esc(value) {
 // Serve Cloudinary images resized + in the best format (WebP/AVIF) instead of the full-size original.
 function optimizeImage(url, width) {
     if (!/^https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\//.test(url)) return url;
-    return url.replace(/\/image\/upload\/(?:.*?\/)?(v\d+\/)/, `/image/upload/f_auto,q_auto,w_${width}/$1`);
+    return url.replace(/\/image\/upload\/(?:.*?\/)?(v\d+\/)/, `/image/upload/f_auto,q_auto:best,w_${width}/$1`);
 }
 
 // Loads the editing tools (only ever for a logged-in admin).
@@ -147,10 +147,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=11';
+        css.href = 'css/admin.css?v=12';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=11';
+        script.src = 'js/admin.js?v=12';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);
@@ -227,7 +227,7 @@ function initProjectPage(data) {
 
         const imagesHTML = project.images.map((img, index) =>
             `<div class="gallery-item${reveal}" data-i="${index}" style="--delay: ${Math.min(0.2 + index * 0.1, 0.6)}s">
-                <img src="${esc(optimizeImage(img, 1600))}" alt="${esc(project.title)} - view ${index + 1}" loading="eager" decoding="async">
+                <img src="${esc(optimizeImage(img, 2400))}" alt="${esc(project.title)} - view ${index + 1}" loading="eager" decoding="async">
             </div>`
         ).join('');
 
@@ -275,7 +275,7 @@ function projectCardHTML(project) {
     return `
         <div class="project-card-media">
             ${project.coverImage
-                ? `<img src="${esc(optimizeImage(project.coverImage, 900))}" alt="${esc(project.title)}" loading="eager" decoding="async">`
+                ? `<img src="${esc(optimizeImage(project.coverImage, 1400))}" alt="${esc(project.title)}" loading="eager" decoding="async">`
                 : '<div class="project-card-empty">No cover yet</div>'}
         </div>
         <div class="project-card-content">
