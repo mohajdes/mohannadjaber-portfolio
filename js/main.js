@@ -95,6 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Page-Specific Logic ---
+    if (document.body.id === 'home-page') {
+        loadProjects().then(initHome).catch(() => document.getElementById('featured')?.remove());
+    }
     if (document.body.id === 'work-page') {
         loadProjects().then(initWorkPage).catch(showLoadError);
     }
@@ -147,10 +150,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=6';
+        css.href = 'css/admin.css?v=7';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=6';
+        script.src = 'js/admin.js?v=7';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);
@@ -179,16 +182,7 @@ function initWorkPage(data) {
             card.className = 'project-card' + (project.hidden ? ' is-draft' : '');
             card.dataset.id = project.id;
             card.style.setProperty('--delay', `${index * 0.02}s`);
-            card.innerHTML = `
-                ${project.coverImage
-                    ? `<img src="${esc(optimizeImage(project.coverImage, 800))}" alt="${esc(project.title)}" loading="lazy" decoding="async">`
-                    : '<div class="project-card-empty">No cover yet</div>'}
-                <div class="project-card-overlay"></div>
-                <div class="project-card-content">
-                    <span class="project-card-tag">${esc(project.tag)}</span>
-                    <h3 class="project-card-title">${esc(project.title)}</h3>
-                </div>
-            `;
+            card.innerHTML = projectCardHTML(project);
             projectGrid.appendChild(card);
         });
         if (ctx.afterRender) ctx.afterRender();
@@ -276,4 +270,36 @@ function initProjectPage(data) {
 
     render();
     if (data.admin) loadAdmin().then(admin => admin.mountProject(ctx)).catch(() => {});
+}
+
+
+// One project card (used on the Work page and for the featured work on the home page).
+function projectCardHTML(project) {
+    return `
+        <div class="project-card-media">
+            ${project.coverImage
+                ? `<img src="${esc(optimizeImage(project.coverImage, 900))}" alt="${esc(project.title)}" loading="lazy" decoding="async">`
+                : '<div class="project-card-empty">No cover yet</div>'}
+        </div>
+        <div class="project-card-content">
+            <h3 class="project-card-title">${esc(project.title)}</h3>
+            <span class="project-card-tag">${esc(project.tag)}</span>
+        </div>
+    `;
+}
+
+function initHome(data) {
+    const grid = document.getElementById('featured-grid');
+    const featured = data.projects.filter(p => !p.hidden && p.coverImage).slice(0, 4);
+    if (!grid || !featured.length) { document.getElementById('featured')?.remove(); return; }
+    featured.forEach(project => {
+        const card = document.createElement('a');
+        card.href = `project.html?id=${encodeURIComponent(project.id)}`;
+        card.className = 'project-card animate-on-scroll';
+        card.innerHTML = projectCardHTML(project);
+        grid.appendChild(card);
+        new IntersectionObserver((entries, obs) => {
+            if (entries[0].isIntersecting) { card.classList.add('is-visible'); obs.disconnect(); }
+        }, { threshold: 0.1 }).observe(card);
+    });
 }
