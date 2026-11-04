@@ -147,10 +147,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=12';
+        css.href = 'css/admin.css?v=13';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=12';
+        script.src = 'js/admin.js?v=13';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);
@@ -223,7 +223,7 @@ function initProjectPage(data) {
     function render() {
         document.title = `${project.title || 'Untitled project'} | Mohannad Jaber`;
         // Visitors get fade-in on scroll; the admin sees everything at once because the page re-renders while editing.
-        const reveal = data.admin ? '' : ' animate-on-scroll';
+        const reveal = '';
 
         const imagesHTML = project.images.map((img, index) =>
             `<div class="gallery-item${reveal}" data-i="${index}" style="--delay: ${Math.min(0.2 + index * 0.1, 0.6)}s">
