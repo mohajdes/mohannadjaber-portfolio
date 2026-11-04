@@ -540,3 +540,8 @@ button { font-family: inherit; }
 @media (min-width: 1100px) {
   .project-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* Gallery images fade in without moving, so they always touch each other */
+.gallery-item.animate-on-scroll, .project-gallery .animate-on-scroll { transform: none; }
+.services-section .section-header { display: block; }
+.services-section .section-subtitle { margin-top: 0.75rem; }
