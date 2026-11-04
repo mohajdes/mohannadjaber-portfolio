@@ -244,13 +244,13 @@ button { font-family: inherit; }
   margin-bottom: 1rem;
 }
 .hero-title {
-  font-size: clamp(3.4rem, 19vw, 15rem);
+  font-size: clamp(3rem, 15.5vw, 15rem);
   font-weight: 800;
   letter-spacing: -0.06em;
   line-height: 0.9;
   margin-left: -0.04em;
 }
-.hero-title .line { display: block; overflow: hidden; padding-bottom: 0.1em; }
+.hero-title .line { white-space: nowrap; display: block; overflow: hidden; padding-bottom: 0.1em; }
 .hero-title span.ch {
   display: inline-block;
   opacity: 0;
