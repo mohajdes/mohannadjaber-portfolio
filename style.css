@@ -141,7 +141,7 @@ button { font-family: inherit; }
   letter-spacing: 0.01em;
   color: var(--color-primary);
 }
-.logo em { font-style: italic; }
+.logo em { font-style: normal; font-weight: 600; }
 
 /* Phone menu: a full-screen sheet with big, easy-to-hit links */
 .nav-links {
@@ -275,7 +275,7 @@ button { font-family: inherit; }
   margin-bottom: 1.5rem;
 }
 .hero-title .line { display: block; overflow: hidden; padding-bottom: 0.08em; }
-.hero-title .line + .line { font-style: italic; font-weight: 400; }
+.hero-title .line + .line { font-weight: 400; }
 .hero-title span.ch {
   display: inline-block;
   opacity: 0;
