@@ -248,7 +248,7 @@ button { font-family: inherit; }
   font-weight: 800;
   letter-spacing: -0.06em;
   line-height: 0.9;
-  margin-left: -0.04em;
+  margin-left: -0.07em;
 }
 .hero-title .line { white-space: nowrap; display: block; overflow: hidden; padding-bottom: 0.1em; }
 .hero-title span.ch {
