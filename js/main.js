@@ -71,12 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Active Nav Link ---
-    const currentPage = window.location.pathname.split('/').pop();
-    const navLinksA = document.querySelectorAll('.nav-link');
-    navLinksA.forEach(link => {
-        if (link.getAttribute('href') === currentPage || (currentPage === '' && link.getAttribute('href') === 'index.html')) {
-            link.classList.add('active');
-        }
+    const currentPage = (window.location.pathname.split('/').pop().replace(/\.html$/, '') || 'index');
+    const section = currentPage === 'project' ? 'work' : currentPage;
+    document.querySelectorAll('.nav-link').forEach(link => {
+        if (link.getAttribute('href').replace(/\.html$/, '') === section) link.classList.add('active');
     });
 
     // --- Scroll Animations ---
@@ -147,10 +145,10 @@ function loadAdmin() {
     return new Promise((resolve, reject) => {
         const css = document.createElement('link');
         css.rel = 'stylesheet';
-        css.href = 'css/admin.css?v=13';
+        css.href = 'css/admin.css?v=14';
         document.head.appendChild(css);
         const script = document.createElement('script');
-        script.src = 'js/admin.js?v=13';
+        script.src = 'js/admin.js?v=14';
         script.onload = () => resolve(window.PFAdmin);
         script.onerror = reject;
         document.head.appendChild(script);
